@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        font-family: Montserrat, system-ui, sans-serif;
+    }
+}
+
+.btn-primary {
+    @apply py-3 bg-indigo-700 rounded-xl text-white px-8 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 shadow-lg shadow-indigo-700/50 hover:bg-indigo-800 hover:shadow-xl hover:shadow-indigo-700/50
+}
