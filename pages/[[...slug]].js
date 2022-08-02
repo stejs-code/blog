@@ -1,54 +1,55 @@
-import {useRouter} from "next/router";
+import {MeiliSearch} from "meilisearch";
+import {Error404} from "../components/Error";
+import Homepage from "../components/Homepage";
+import {motion} from "framer-motion";
 
-import {Homepage} from "../templates/homepage"
-import Article from "../templates/article"
-import {Error404} from "../templates/error";
-import Layout from "../templates/@layout";
+const client = new MeiliSearch({
+    host: 'http://127.0.0.1:7700',
+    apiKey: 'susamogus',
+})
 
-function Boot({articles}) {
+const variants = {
+    hidden: {opacity: 0, scale: 0.9},
+    enter: {opacity: 1, scale: 1},
+    exit: {opacity: 0, y: -100}
+}
 
-    const router = useRouter();
-    let detail = undefined;
-
-    articles.forEach(function (item) {
-        if (item.slug === router.asPath) {
-            detail = item;
-        }
-    })
-
-    if (!detail) {
-        return (
-            <Error404/>
-        )
+const TemplateLoader = ({detail}) => {
+    detail = detail[0];
+    if (detail === undefined) {
+        return <Error404/>
     }
-
-
-    const path = useRouter().asPath;
     if (detail.template === "homepage") {
-        return (
-            <Layout key={path} title={detail.title}>
-                <Homepage detail={detail}></Homepage>
-            </Layout>
-        )
-    }
-
-    if (detail.template === "article") {
-        return (
-            <Layout key={path} title={detail.title}>
-                <Article detail={detail}></Article>
-            </Layout>
-        )
+        return <Homepage detail={detail}/>
     }
 }
 
-// This gets called on every request
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const res = await fetch(`http://localhost:3000/articles.json`)
-    const articles = await res.json()
+export default function Main({detail}) {
+    return (
+        <motion.main
+            variants={variants} // Pass the variant object into Framer Motion
+            initial="hidden" // Set the initial state to variants.hidden
+            animate="enter" // Animated state to variants.enter
+            exit="exit" // Exit state (used later) to variants.exit
+            transition={{type: 'linear'}} // Set the transition to linear
+            className=""
+        >
+            <TemplateLoader detail={detail}/>
+        </motion.main>
+    )
 
-    // Pass data to the page via props
-    return {props: {articles}}
+
 }
 
-export default Boot
+
+export async function getServerSideProps(context) {
+
+    let articles = await client.index('articles')
+        .search('', {
+            filter: ['slug = "' + context.resolvedUrl + '"']
+        })
+
+    const detail = articles.hits;
+
+    return {props: {detail}}
+}
