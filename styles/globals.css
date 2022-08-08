@@ -6,6 +6,12 @@
     html {
         font-family: Montserrat, system-ui, sans-serif;
     }
+
+    body {
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+        overflow-y: scroll;
+    }
 }
 
 .btn-primary {
@@ -14,4 +20,9 @@
     hover:-translate-y-1 hover:scale-110
     hover:bg-indigo-800 hover:shadow-xl hover:shadow-indigo-700/50
     transition ease-in-out  duration-300
+}
+
+.edjs-block a{
+    @apply decoration-2 decoration-indigo-700 decoration-solid  ;
+    text-decoration-line: underline;
 }
