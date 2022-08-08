@@ -82,10 +82,10 @@ export async function getServerSideProps(context) {
     if (routeDocument.hits[0] !== undefined) {
         routeDocument = routeDocument.hits[0];
 
-        if (routeDocument.type === "article") {
+        if (routeDocument.type === "content") {
             const article = await client
                 .index('articles')
-                .getDocument(routeDocument.target_id)
+                .getDocument(routeDocument.target)
 
             data = {
                 type: "article",
@@ -97,7 +97,7 @@ export async function getServerSideProps(context) {
         if (routeDocument.type === "custom") {
             data = {
                 type: "custom",
-                target: routeDocument.target_id
+                target: routeDocument.target
             }
 
             return {props: {data}}

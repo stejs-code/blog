@@ -19,16 +19,11 @@ const Header = ({menu}) => {
                                 return (
                                     <li key={"MenuId" + item.id}>
                                         <Link href={item.slug} scroll={false}>
-                                            <a>{item.en.menu}</a>
+                                            <a>{item.text.en}</a>
                                         </Link>
                                     </li>
                                 )
                             })}
-                            <li>
-                                <Link href="/amogus" scroll={false}>
-                                    <a>sus amogus</a>
-                                </Link>
-                            </li>
                         </ul>
                     </div>
                 </div>

@@ -30,8 +30,8 @@ function MyApp({Component, pageProps, menu}) {
     )
 }
 
-MyApp.getInitialProps = async (appContext) => {
-    let menu = (await client.index('articles')
+MyApp.getInitialProps = async () => {
+    let menu = (await client.index('router')
         .search('', {
             filter: ['menu = true']
         })).hits
